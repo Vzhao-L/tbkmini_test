@@ -1,4 +1,4 @@
-if SHIELD_TBK_MINI_RIGHT
+if SHIELD_TBK_MINI_LEFT
 
 config ZMK_KEYBOARD_NAME
 	default "TBK-Mini"
