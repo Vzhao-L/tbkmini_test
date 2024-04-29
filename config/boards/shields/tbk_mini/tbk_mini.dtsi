@@ -46,13 +46,28 @@ RC(2,0) RC(2,1) RC(2,2) RC(2,3) RC(2,4) RC(2,5)  RC(2,6)  RC(2,7) RC(2,8) RC(2,9
 };
 
 
+&pinctrl {
+    spi3_default: spi3_default {
+        group1 {
+            psels = <NRF_PSEL(SPIM_MOSI, 0, 7)>;
+        };
+    };
+
+    spi3_sleep: spi3_sleep {
+        group1 {
+            psels = <NRF_PSEL(SPIM_MOSI, 0, 7)>;
+            low-power-enable;
+		};
+	};
+};
+
 &spi3 {
 	compatible = "nordic,nrf-spim";
 	status = "okay";
-    sck-pin = <21>; //old
-    mosi-pin = <7>; //old
-    miso-pin = <7>;//old same as mosi (3-wire spi)
-	cs-gpios = <&gpio0 23 GPIO_ACTIVE_LOW>;
+
+	pinctrl-0 = <&spi3_default>;
+	pinctrl-1 = <&spi3_sleep>;
+	pinctrl-names = "default", "sleep";
 
 
 	led_strip: ws2812@0 {
@@ -64,7 +79,7 @@ RC(2,0) RC(2,1) RC(2,2) RC(2,3) RC(2,4) RC(2,5)  RC(2,6)  RC(2,7) RC(2,8) RC(2,9
 		spi-max-frequency = <4000000>;
 
 		/* WS2812 */
-		chain-length = <24>; /* There are per-key RGB, but the first 6 are underglow */
+		chain-length = <27>; /* There are per-key RGB, but the first 6 are underglow */
 		spi-one-frame = <0x70>;
 		spi-zero-frame = <0x40>;
 		color-mapping = <LED_COLOR_ID_GREEN LED_COLOR_ID_RED LED_COLOR_ID_BLUE>;
